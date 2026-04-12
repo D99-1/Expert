@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EXPERT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,400;1,600;1,700;1,800&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#0e0e0e",
+                    "on-surface": "#ffffff",
+                    "primary": "#9cff93",
+                    "on-primary": "#006413",
+                    "secondary": "#00e3fd",
+                    "on-surface-variant": "#adaaaa",
+                    "outline-variant": "#494847",
+                    "surface-container-high": "#201f1f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Newsreader", "serif"],
+                    "body": ["Space Grotesk", "sans-serif"],
+                    "label": ["Space Grotesk", "sans-serif"],
+                    "mono": ["Space Grotesk", "monospace"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 100, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        .steps-4 { transition-timing-function: steps(4, end); }
+        .steps-2 { transition-timing-function: steps(2, end); }
+        
+        .scanlines {
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(255,255,255,0.03) 50%);
+            background-size: 100% 4px;
+            background-position: 0 0;
+            pointer-events: none;
+            animation: scanlines-move 3s linear infinite;
+        }
+
+        @keyframes scanlines-move {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 4px; }
+        }
+
+        .digital-grain {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .hero-phrase {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.14em;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .hero-slot {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 8ch;
+            height: 1.08em;
+            line-height: 1;
+        }
+
+        .hero-slot-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(50% + 0.28em);
+            height: 0.065em;
+            background: currentColor;
+            opacity: 0.78;
+            border-radius: 999px;
+            transform: translateY(-50%);
+        }
+
+        .hero-word {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font: inherit;
+            line-height: 1;
+            will-change: transform, opacity;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero-word.is-changing {
+            animation: word-flicker 0.78s steps(2, end) both;
+        }
+
+        .hero-word.glitch {
+            position: relative;
+            inset: auto;
+            color: #9cff93;
+        }
+
+        .hero-word.glitch::before {
+            content: attr(data-text);
+            position: absolute;
+            inset: 0;
+            left: 0;
+            text-shadow: 1px 0 #00e3fd;
+            color: #000000;
+            background: transparent;
+            overflow: hidden;
+            clip: rect(0, 900px, 0, 0);
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .hero-word.glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            inset: 0;
+            color: transparent;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.62) 0,
+                rgba(255, 255, 255, 0.62) 3px,
+                rgba(255, 255, 255, 0) 3px,
+                rgba(255, 255, 255, 0) 7px
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            opacity: 0.36;
+            animation: scan-flicker 2.8s infinite steps(3, end);
+            pointer-events: none;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(44px, 9999px, 56px, 0); }
+            20% { clip: rect(12px, 9999px, 34px, 0); }
+            40% { clip: rect(87px, 9999px, 90px, 0); }
+            60% { clip: rect(22px, 9999px, 78px, 0); }
+            80% { clip: rect(5px, 9999px, 12px, 0); }
+            100% { clip: rect(67px, 9999px, 88px, 0); }
+        }
+
+        @keyframes scan-flicker {
+            0%, 100% { opacity: 0.3; transform: translateY(0); }
+            50% { opacity: 0.42; transform: translateY(0px); }
+        }
+
+        @keyframes word-flicker {
+            0% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+            12% { opacity: 0.22; transform: translateY(0.01em) scale(1.01); filter: blur(0.4px); }
+            24% { opacity: 0; transform: translateY(0) scale(0.99); filter: blur(1px); }
+            38% { opacity: 0.9; transform: translateY(0) scale(1.01); filter: blur(0.12px); }
+            52% { opacity: 0.18; transform: translateY(-0.01em) scale(1); filter: blur(0.5px); }
+            64% { opacity: 0; transform: translateY(0.01em) scale(0.99); filter: blur(1px); }
+            78% { opacity: 0.88; transform: translateY(0) scale(1.01); filter: blur(0.12px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        .grid-overlay {
+            background-image: radial-gradient(circle, #494847 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .state-niche { opacity: 1; transition: opacity 0.5s steps(4); }
+        .state-general { opacity: 0; transition: opacity 0.5s steps(4); }
+        
+        @keyframes state-swap {
+            0%, 80% { opacity: 1; visibility: visible; }
+            81%, 100% { opacity: 0; visibility: hidden; }
+        }
+        @keyframes state-reveal {
+            0%, 80% { opacity: 0; visibility: hidden; }
+            81%, 100% { opacity: 1; visibility: visible; }
+        }
+
+        .niche-overlay { animation: state-swap 6s forwards; }
+        .general-overlay { animation: state-reveal 6s forwards; }
+
+        body.topic-intro {
+            background-color: #0a100a;
+        }
+
+        body.topic-intro #hero-section {
+            isolation: isolate;
+        }
+
+        body.topic-intro #hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(7, 17, 7, 0.52), rgba(7, 17, 7, 0.52)),
+                var(--topic-intro-image, none),
+                radial-gradient(circle at 50% 20%, #1e2f1d 0%, #122112 48%, #080f08 100%);
+            background-size: cover, cover, cover;
+            background-position: center, center, center;
+            image-rendering: pixelated;
+            pointer-events: none;
+            opacity: 0.74;
+            animation: niche-bg-hold 5s linear forwards;
+        }
+
+        body.topic-intro #hero-section > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-glitch {
+            animation: page-glitch-in 680ms steps(2, end) both;
+        }
+
+        @keyframes niche-bg-hold {
+            0%, 90% { opacity: 0.74; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes page-glitch-in {
+            0% { filter: contrast(1.25) saturate(1.2) hue-rotate(12deg); transform: translateX(0.2%); }
+            45% { filter: contrast(0.92) saturate(1.05) hue-rotate(-8deg); transform: translateX(-0.2%); }
+            100% { filter: none; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body overflow-x-hidden selection:bg-primary selection:text-on-primary">
+<div class="fixed inset-0 digital-grain z-[100]"></div>
+<div class="fixed inset-0 scanlines z-[99]"></div>
+<nav class="fixed top-0 left-0 w-full z-[110] flex justify-between items-center px-6 py-4 bg-[#0e0e0e]">
+<div class="inline-flex items-center justify-center rounded-md bg-black/80 border border-white/10 px-3 py-1 shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
+<img alt="EXPERT" class="block h-9 w-auto max-w-[180px] object-contain" src="./Expert.png"/>
+</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-gray-500 font-mono text-xs uppercase tracking-widest hover:bg-[#9cff93]/10 hover:text-[#9cff93] transition-all steps-4" href="#">DOCS</a>
+<a class="text-gray-500 font-mono text-xs uppercase tracking-widest hover:bg-[#9cff93]/10 hover:text-[#9cff93] transition-all steps-4" href="https://shop.m5stack.com/products/atom-echo-smart-speaker-dev-kit">HARDWARE</a>
+<a class="text-gray-500 font-mono text-xs uppercase tracking-widest hover:bg-[#9cff93]/10 hover:text-[#9cff93] transition-all steps-4" href="https://hackclub.com/">HACK CLUB</a>
+</div>
+<button class="bg-[#00FF41] text-[#006413] px-6 py-1 font-mono text-xs uppercase tracking-widest hover:bg-[#9cff93]/10 hover:text-[#9cff93] transition-all steps-4 border border-[#00FF41]">
+            Sign Up
+        </button>
+</nav>
+<main class="relative min-h-screen pb-20">
+<div class="absolute inset-0 grid-overlay opacity-20"></div>
+<section id="hero-section" class="relative z-10 box-border px-6 pt-32 w-full min-h-screen flex flex-col items-center justify-center text-center">
+
+<h1 class="text-5xl md:text-7xl lg:text-8xl font-headline italic tracking-tighter leading-none mb-8 relative whitespace-nowrap" data-text="Build a Chess Expert.">
+<span class="hero-phrase">Build a <span class="hero-slot"><span class="hero-slot-line"></span><span id="hero-niche" class="hero-word glitch" data-text="Chess">Chess</span></span> Expert.</span>
+            </h1>
+<p class="max-w-2xl text-lg md:text-xl text-on-surface-variant font-light mb-12">
+                They say it takes 10,000 hours to become an expert,<br> <span class="text-on-surface font-semibold italic">build one in a weekend instead.</span>
+            </p>
+<div class="flex flex-col md:flex-row gap-4 mb-20">
+<button class="bg-primary text-on-primary px-10 py-4 font-mono text-sm font-bold uppercase tracking-widest hover:translate-x-1 hover:translate-y-1 transition-transform steps-2 border border-primary">
+                    Sign Up
+                </button>
+<button class="border border-outline-variant px-10 py-4 font-mono text-sm uppercase tracking-widest text-on-surface hover:bg-surface-container-high transition-all">
+                    Learn more
+                </button>
+</div>
+</section>
+</main>
+<footer class="w-full py-12 px-6 border-t border-[#ffffff]/10 flex flex-col md:flex-row justify-between items-end bg-[#000000]">
+<div class="flex flex-col mb-8 md:mb-0">
+<div class="font-serif text-lg text-white mb-4">EXPERT</div>
+<div class="font-mono text-[10px] uppercase leading-relaxed text-gray-600">A Potential Hack Club YSWS</div>
+</div>
+<div class="flex flex-col md:flex-row gap-6 md:gap-12">
+<a class="font-mono text-[10px] uppercase leading-relaxed text-gray-600 hover:text-[#00FF41]" href="#">DOCS</a>
+<a class="font-mono text-[10px] uppercase leading-relaxed text-gray-600 hover:text-[#00FF41]" href="https://shop.m5stack.com/products/atom-echo-smart-speaker-dev-kit">M5Stack ATOM Echo</a>
+<a class="font-mono text-[10px] uppercase leading-relaxed text-gray-600 hover:text-[#00FF41]" href="https://hackclub.com/">Hack Club</a>
+</div>
+</footer>
+<script>
+    (() => {
+        const NICHE_THEME_CONFIG = {
+            minecraft: {
+                display: "Minecraft",
+                image: "https://preview.redd.it/minecraft-1920x1080-v0-uc6hys9ehl471.jpg?width=1080&crop=smart&auto=webp&s=74037f2763ebd313109c392559adde3661d118c3"
+            },
+            chess: {
+                display: "Chess",
+                image: "https://m.wsj.net/video/20171117/111717chess_1/111717chess_1_1920x1080.jpg"
+            },
+            formula1: {
+                display: "Formula 1",
+                image: "https://media.drive.com.au/obj/tx_q:50,rs:auto:1920:1080:1/driveau/upload/cms/uploads/f0120c24-93b3-53ae-af5b-321db9f50000"
+            },
+            jetlag: {
+                display: "Jet Lag",
+                image: "https://images.nebula.tv/aa8b9e98-f02a-48e3-b81b-ffb4e41fc58d"
+            },
+            bleachers:{
+                display: "Bleachers",
+                image: "https://i0.wp.com/soundofboston.com/wp-content/uploads/2013/11/Belachers_KimmyCurry-39.jpg?w=1600&ssl=1"
+            },
+            hackclub: {
+                display: "Hack Club",
+                image: "https://i0.wp.com/makezine.com/wp-content/uploads/2024/06/01-Hack_Club_Assemble_LTNJ_02688-scaled.jpg"
+            },
+            onepiece: {
+                display: "One Piece",
+                image: "https://dw9to29mmj727.cloudfront.net/promo/2016/5265-SeriesHeaders_OP_2000x800_wm.jpg"
+            },
+            duckdb: {
+                display: "DuckDB",
+                image: "https://duckdb.org/images/blog/thumbs/duckdb-now-speaks-dutch.svg"
+            }
+            
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const rawTopic = (params.get("t") || "").trim();
+        const safeTopic = rawTopic.replace(/[^a-z0-9\-\s]/gi, "").replace(/\s+/g, " ").slice(0, 28);
+        const normalizedTopic = safeTopic.toLowerCase();
+        const mappedTheme = NICHE_THEME_CONFIG[normalizedTopic];
+        const displayTopic = mappedTheme?.display || safeTopic
+            .toLowerCase()
+            .split(" ")
+            .filter(Boolean)
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+
+        const nicheElement = document.getElementById("hero-niche");
+        const headlineElement = nicheElement?.closest("h1");
+
+        if (!nicheElement || !headlineElement) return;
+
+        const niches = ["Chess", "Minecraft", "Jet Lag", "Formula 1", "Cricket", "Soccer", "Football", "Terraria", "Cooking", "Gardening", "Hip Hop", "Rap"];
+        let startDelay = 700;
+
+        const getRandomNicheExcluding = (currentNiche) => {
+            const pool = niches.filter(
+                (niche) => niche.toLowerCase() !== (currentNiche || "").toLowerCase()
+            );
+
+            if (pool.length === 0) return currentNiche || niches[0] || "Expert";
+
+            return pool[Math.floor(Math.random() * pool.length)];
+        };
+
+        if (displayTopic) {
+            nicheElement.textContent = displayTopic;
+            nicheElement.setAttribute("data-text", displayTopic);
+            startDelay = 5000;
+            document.body.classList.add("topic-intro");
+
+            if (mappedTheme?.image) {
+                document.body.style.setProperty("--topic-intro-image", `url(\"${mappedTheme.image}\")`);
+            } else {
+                document.body.style.removeProperty("--topic-intro-image");
+            }
+
+            window.setTimeout(() => {
+                document.body.classList.add("page-glitch");
+            }, 5000);
+
+            window.setTimeout(() => {
+                document.body.classList.remove("topic-intro");
+                document.body.style.removeProperty("--topic-intro-image");
+                document.body.classList.remove("page-glitch");
+            }, 5700);
+        }
+
+        const updateHeadline = () => {
+            const currentNiche = nicheElement.textContent || "";
+            const niche = getRandomNicheExcluding(currentNiche);
+            nicheElement.classList.add("is-changing");
+
+            window.setTimeout(() => {
+                nicheElement.textContent = niche;
+                nicheElement.setAttribute("data-text", niche);
+            }, 360);
+
+            window.setTimeout(() => {
+                nicheElement.classList.remove("is-changing");
+            }, 780);
+        };
+
+        window.setTimeout(() => {
+            updateHeadline();
+            setInterval(updateHeadline, 2400);
+        }, startDelay);
+    })();
+</script>
+</body></html>
