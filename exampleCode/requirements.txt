@@ -1,0 +1,7 @@
+beautifulsoup4
+chromadb
+fastembed
+groq
+python-dotenv
+requests
+streamlit
